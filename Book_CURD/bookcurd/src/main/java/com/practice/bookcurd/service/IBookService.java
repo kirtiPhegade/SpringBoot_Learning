@@ -7,4 +7,5 @@ public interface IBookService {
 
 
     Book createAndSaveBook(Book book);
+    Book getBookById(Long id);
 }

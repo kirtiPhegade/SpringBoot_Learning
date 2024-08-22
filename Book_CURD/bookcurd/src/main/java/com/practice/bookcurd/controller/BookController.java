@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.View;
 
 import java.util.Map;
@@ -87,5 +84,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
 
-
+    @GetMapping("/book/{bookId}")
+    public ResponseEntity<?> getBookById(@PathVariable("bookId") Long bookId){
+        book = bookService.getBookById(bookId);
+        if(book == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found. please check book id.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(book);
+    }
 }
