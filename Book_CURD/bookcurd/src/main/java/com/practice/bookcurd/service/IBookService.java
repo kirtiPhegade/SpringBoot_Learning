@@ -1,9 +1,10 @@
 package com.practice.bookcurd.service;
 
-import org.springframework.stereotype.Repository;
+import com.practice.bookcurd.entity.Book;
 
 
 public interface IBookService {
 
 
+    Book createAndSaveBook(Book book);
 }

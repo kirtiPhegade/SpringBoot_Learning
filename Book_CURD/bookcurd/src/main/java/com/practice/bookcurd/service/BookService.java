@@ -12,4 +12,9 @@ public class BookService implements IBookService {
     private IBookRepository bookRepository;
     @Autowired
     Book book;
+
+    @Override
+    public Book createAndSaveBook(Book book) {
+        return bookRepository.save(book);
+    }
 }
