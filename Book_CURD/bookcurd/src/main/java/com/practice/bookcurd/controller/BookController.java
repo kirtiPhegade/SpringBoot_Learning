@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.View;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -91,5 +92,15 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found. please check book id.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(book);
+    }
+
+    @GetMapping("/books")
+    public ResponseEntity<?> getAllBooks(){
+        List<Book> books = bookService.getAllBooks();
+        if(books.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(books);
+        }
     }
 }

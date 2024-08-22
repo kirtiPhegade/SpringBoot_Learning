@@ -5,6 +5,7 @@ import com.practice.bookcurd.repository.IBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,5 +23,9 @@ public class BookService implements IBookService {
 
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElse(null);
+    }
+
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 }
