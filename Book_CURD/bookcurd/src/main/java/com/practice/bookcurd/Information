@@ -1,0 +1,7 @@
+**Dependencies**
+1)spring web
+2)jpa
+3)h2
+4)mySQL JDBC
+5)Lombok
+6)validation
