@@ -103,4 +103,23 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.OK).body(books);
         }
     }
+
+    @PutMapping("/book/{bookId}")
+    public ResponseEntity<?> UpdateBookById(@PathVariable Long bookId, @Valid @RequestBody Book book, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            Map<String,String> errors = bindingResult.getFieldErrors().stream()
+                    .collect(Collectors.toMap(
+                            error -> error.getField(),
+                            error -> error.getDefaultMessage(),
+                            (e,r) -> e
+
+                    ));
+        }
+        book = bookService.updateBookById(bookId,book);
+        if(book == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
+        }else{
+            return ResponseEntity.status(HttpStatus.OK).body(book);
+        }
+    }
 }

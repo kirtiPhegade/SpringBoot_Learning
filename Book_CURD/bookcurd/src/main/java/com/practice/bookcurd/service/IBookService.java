@@ -11,4 +11,5 @@ public interface IBookService {
     Book createAndSaveBook(Book book);
     Book getBookById(Long id);
     List<Book> getAllBooks();
+    Book updateBookById(Long id, Book book);
 }
