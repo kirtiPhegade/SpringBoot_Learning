@@ -4,6 +4,8 @@ import com.practice.bookcurd.entity.Book;
 import com.practice.bookcurd.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,11 +27,17 @@ public class BookController {
     private View error;
 
     /* controller for
-    1) Post/books           create new book
-    2) Get/books            retrieve a list of all books.
-    3) Get/books/{id}       retrieve a book bu it's ID
-    4) Put/books/{id}       update book details title and author should not empty
-    5) Delete/books/{id}    delete book by ID
+    1) Post/books                   create new book
+    2) Get/books                    retrieve a list of all books.
+    3) Get/books/{id}               retrieve a book bu it's ID
+    4) Put/books/{id}               update book details title and author should not empty
+    5) Delete/books/{id}            delete book by ID
+    6) add new categotyName in our table
+    7) Get/books/{categotyName}     search book by category name
+    8) Get/books/search             search book use @RequestParam.
+                                    The search should be case-insensitive and should allow partial matches
+                                    (e.g., searching for "Java" should return books like "Effective Java" and "Java Concurrency in Practice").
+    9) Get/books/paginated          get all book use pagination use @RequestParam
      */
 
     /*Create new Book and save in database
@@ -120,6 +128,47 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
         }else{
             return ResponseEntity.status(HttpStatus.OK).body(book);
+        }
+    }
+
+    @DeleteMapping("/book/{bookId}")
+    public ResponseEntity<?> DeleteBookById(@PathVariable Long bookId){
+        String isDeleted = bookService.DeleteBookById(bookId);
+        if(isDeleted == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(isDeleted);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.OK).body(isDeleted);
+        }
+    }
+
+    @GetMapping("/books/{categotyName}")
+    public ResponseEntity<?> getBooksByCategory(@PathVariable("categotyName") String categotyName){
+        List<Book> books = bookService.getBooksByCategory(categotyName);
+        if(books.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(books);
+        }
+    }
+
+    @GetMapping("/books/search")
+    public ResponseEntity<?> getBooksByCategoryUsingRequestParam(@RequestParam(value = "categotyName", required = false) String categotyName){
+        List<Book> books = bookService.getBooksByCategoryUsingRequestParam(categotyName);
+        if(books.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(books);
+        }
+    }
+
+    @GetMapping("/books/paginated")
+    public ResponseEntity<?> getAllBooksByPagination(@RequestParam(defaultValue = "0",required = false) int page, @RequestParam(defaultValue = "3",required = false) int size){
+        Page<Book> books = bookService.getAllBooksByPagination(page, size);
+        if(books.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book is not found.");
+        }else {
+            return new ResponseEntity<>(books, HttpStatus.OK);
         }
     }
 }

@@ -4,6 +4,9 @@ import com.practice.bookcurd.entity.Book;
 import com.practice.bookcurd.repository.IBookRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,5 +41,36 @@ public class BookService implements IBookService {
         }
     }
 
-    
+
+    public String DeleteBookById(Long bookId) {
+        if(bookRepository.existsById(bookId)) {
+            bookRepository.deleteById(bookId);
+            return "Book Deleted";
+        }else{
+            return "Book Not Found";
+        }
+    }
+
+    public List<Book> getBooksByCategory(String categotyName) {
+        List<Book> books = bookRepository.findAllByCategotyName(categotyName);
+        if(books.isEmpty()){
+            return null;
+        }else{
+            return books;
+        }
+    }
+
+    public List<Book> getBooksByCategoryUsingRequestParam(String categotyName) {
+        List<Book> books = bookRepository.findAllByCategotyNameContainingIgnoreCase(categotyName);
+        if(books.isEmpty()){
+            return null;
+        }else{
+            return books;
+        }
+    }
+
+    public Page<Book> getAllBooksByPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findAll(pageable);
+    }
 }

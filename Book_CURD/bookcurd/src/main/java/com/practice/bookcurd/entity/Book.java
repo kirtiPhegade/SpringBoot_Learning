@@ -33,5 +33,6 @@ public class Book {
     @Min(value = 1000, message = "Published year cannot be earlier than 1000")
     @Max(value = 2090, message = "Published year cannot be later than 2090")
     private Integer publishedYear;
-
+    //New field added later
+    private String categotyName;
 }
